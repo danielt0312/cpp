@@ -2,7 +2,6 @@
 #include <list>
 
 #include "Window.h"
-//#include "review.h"
 
 int main(int argc, char *argv[]) {
 
@@ -13,7 +12,7 @@ int main(int argc, char *argv[]) {
     //window.setStyleSheet("background-color: cyan;"); 
 
     window.resize(1280, 720);
-    window.setWindowTitle("Graph Transversal");
+    window.setWindowTitle("Graph Traversal");
     window.show();
 
   return app.exec();

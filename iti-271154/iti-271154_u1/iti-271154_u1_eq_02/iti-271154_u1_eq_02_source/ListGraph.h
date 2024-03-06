@@ -2,6 +2,8 @@
 
 #include <QWidget>
 #include <list>
+#include <unordered_set>
+#include <iostream>
 #include "Graph.h"
 
 using namespace std;  
@@ -15,7 +17,7 @@ class ListGraph : public QWidget {
 
     void mousePressEvent(QMouseEvent* event);
     
-    void limpiar() { listaGrafos.clear();};
+    void limpiar() { listaGrafos.clear(); std::cout << "Lista de Grafos limpiada" << std::endl;};
     void addEdge(int, int);
     void dibujarFlecha(QPainter &, int, int, int, int);
     void dibujarArista(QPainter &, Graph &);
@@ -23,6 +25,8 @@ class ListGraph : public QWidget {
     void displayAdajencyMatrix(std::vector<std::vector<int>> &);
     void adjacencyLists();
     void displayAdjacencyLists(list<Graph> &);
+    void DFSUtil(Graph &, unordered_set<int> &);
+    void DFS();
   protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);

@@ -28,9 +28,6 @@ ListGraph::ListGraph(QWidget *parent)
     h = height();
     w = width();
 
-    std::cout << "h" << h << "\n"<< endl;
-    std::cout << "w" << w << "\n"<< endl;        
-
     altoC = 40;
     anchoC = 40;
 }
@@ -309,4 +306,39 @@ void ListGraph::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
     ventanaEmergente->exec();
 }
 
+
+void ListGraph::DFSUtil(Graph& grafo, std::unordered_set<int>& visitados) {
+    // Imprimir el valor del nodo actual
+    std::cout << grafo.getContent().getValor() << " ";
+
+    // Marcar el nodo actual como visitado
+    visitados.insert(grafo.getContent().getValor());
+
+    // Recorrer los nodos adyacentes no visitados
+    for (Node nodoDestino : *(grafo.vertices)) {
+        if (visitados.find(nodoDestino.getValor()) == visitados.end()) {
+            auto it = std::find_if(listaGrafos.begin(), listaGrafos.end(),
+                [&nodoDestino](Graph& g) { return g.getContent() == nodoDestino; });
+
+            if (it != listaGrafos.end()) {
+                DFSUtil(*it, visitados);
+            }
+        }
+    }
+}
+
+void ListGraph::DFS() {
+    std::unordered_set<int> visitados;
+
+    std::cout << "Recorrido DFS: ";
+    int i = 1;
+    for (Graph& grafo : listaGrafos) {
+        if (visitados.find(grafo.getContent().getValor()) == visitados.end()) {
+            std::cout << "Componente " << i << ": ";
+            DFSUtil(const_cast<Graph&>(grafo), visitados);
+            std::cout << std::endl;
+            i++;
+        }
+    }
+}
 
