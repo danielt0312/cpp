@@ -91,6 +91,6 @@ Review::Review(QWidget *parent) : QWidget(parent) {
 void Review::guardarConexion() {
 	QString puntoA = inputGrafoA->text();
 	QString puntoB = inputGrafoB->text();
-	pm1->crearArista(puntoA.toInt(), puntoB.toInt());
+	pm1->addEdge(puntoA.toInt(), puntoB.toInt());
 }
 

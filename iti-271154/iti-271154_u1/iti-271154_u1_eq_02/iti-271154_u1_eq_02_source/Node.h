@@ -10,5 +10,6 @@ public:
 	int getX();
 	int getY();
 	int getValor();
+	bool operator==(const Node& other) const;
 };
 

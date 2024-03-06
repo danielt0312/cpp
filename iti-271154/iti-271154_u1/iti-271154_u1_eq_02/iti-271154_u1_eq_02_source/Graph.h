@@ -7,7 +7,7 @@ private:
 	Node content;
 public:
 	Graph(int, int, int);
-	std::list<Node> vertices;
+	std::list<Node>* vertices = new std::list<Node>();
 	Node getContent();
 };
 

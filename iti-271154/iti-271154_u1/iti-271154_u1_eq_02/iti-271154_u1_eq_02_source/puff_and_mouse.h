@@ -14,8 +14,9 @@ class Puff_and_Mouse : public QWidget {
     Puff_and_Mouse(QWidget *parent = 0);
 
     void mousePressEvent(QMouseEvent* event);
-    void crearArista(int, int);
-    void dibujarFlecha(int, int, int, int);
+    
+    void addEdge(int, int);
+    void dibujarFlecha(Graph&);
   protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);

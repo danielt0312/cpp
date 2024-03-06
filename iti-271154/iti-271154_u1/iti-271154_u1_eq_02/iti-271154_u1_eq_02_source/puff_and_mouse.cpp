@@ -11,8 +11,6 @@
 #include <list>
 #include <iostream>
 
-#include "Graph.h"
-#include "punto.h"
 #include "puff_and_mouse.h"
 #include <fstream>
 #include <string>
@@ -70,17 +68,17 @@ void Puff_and_Mouse::doPainting() {
     font.setPointSize(9);
     painter.setFont(font);
 
-    for (Graph punto : listaGrafos) {
-        int centerX = punto.getContent().getX() - anchoC / 2;
-        int centerY = punto.getContent().getY() - altoC / 2;
+    for (Graph grafo : listaGrafos) {
+        //dibujarFlecha(punto);
+        
+        int centerX = grafo.getContent().getX() - anchoC / 2;
+        int centerY = grafo.getContent().getY() - altoC / 2;
 
         painter.drawEllipse(centerX, centerY, anchoC, altoC);
 
-	QString valor = QString::fromStdString(std::to_string(punto.getContent().getValor()));
-        painter.drawText(punto.getContent().getX()-6, punto.getContent().getY()+4, valor);
+	QString valor = QString::fromStdString(std::to_string(grafo.getContent().getValor()));
+        painter.drawText(grafo.getContent().getX()-6, grafo.getContent().getY()+4, valor);
     }
-
-    //dibujarFlecha(puntoOrigen.getX(), puntoOrigen.getY(), puntoDestino.getX(), puntoDestino.getY());
 }
 
 void Puff_and_Mouse::timerEvent(QTimerEvent *e) {
@@ -89,30 +87,44 @@ void Puff_and_Mouse::timerEvent(QTimerEvent *e) {
 }
 
 
-void Puff_and_Mouse::crearArista(int puntoA, int puntoB) {
-	if(puntoA <= 0 or puntoA > listaGrafos.size() or puntoB <= 0 or puntoB > listaGrafos.size()) {
+void Puff_and_Mouse::addEdge(int i, int j) {
+	if(i <= 0 or i > listaGrafos.size() or j <= 0 or j > listaGrafos.size() or i == j) {
 		std::cout << "Valor(es) invalidos" << std::endl;
 		return;
 	}
 	
         auto itA = listaGrafos.end();
-        std::advance(itA, -puntoA);
+        std::advance(itA, -i);
 
         Graph puntoOrigen = *itA;
 
-        std::cout << "Graph A (valor ingresado: " << puntoA << ") existe en: " << puntoOrigen.getContent().getX() << " , " << puntoOrigen.getContent().getY() << std::endl;
+        std::cout << "Grafo i (valor ingresado: " << i << ") existe en: " << puntoOrigen.getContent().getX() << " , " << puntoOrigen.getContent().getY() << std::endl;
         
         auto itB = listaGrafos.end();
-        std::advance(itB, -puntoB);
+        std::advance(itB, -j);
 
         Graph puntoDestino = *itB;
 
-        std::cout << "Graph B (valor ingresado: " << puntoB << ") existe en: " << puntoDestino.getContent().getX() << " , " << puntoDestino.getContent().getY() << std::endl;
+        std::cout << "Grafo j (valor ingresado: " << j << ") existe en: " << puntoDestino.getContent().getX() << " , " << puntoDestino.getContent().getY() << std::endl;
         
+        for(Node nodo : *(puntoOrigen.vertices)) {
+        	if(nodo == puntoDestino.getContent()){
+        		std::cout << "Relación previamente ya creada: i( " << nodo.getValor() << ") j(" << puntoDestino.getContent().getValor() << ")" << std::endl;
+        		return;
+        	}
+        }
+        
+        puntoOrigen.vertices->push_front(puntoDestino.getContent());
+        std::cout << puntoOrigen.vertices->size() << std::endl;
+        
+        for(Node nodo : *(puntoOrigen.vertices)) {
+        	std::cout << "X: " << nodo.getX() << " Y: " << nodo.getY() << " V: " << nodo.getValor() << std::endl;
+        }
 }
 
 /*
-void Puff_and_Mouse::dibujarFlecha(int x1, int y1, int x2, int y2) {
+
+void Puff_and_Mouse::dibujarFlecha(Graph& grafo) {
     QPainter painter(this);
 
     QPen pen = painter.pen();
@@ -133,5 +145,5 @@ void Puff_and_Mouse::dibujarFlecha(int x1, int y1, int x2, int y2) {
     // Dibujar cabeza de flecha
     painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
     painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
-}*/
-
+}
+*/

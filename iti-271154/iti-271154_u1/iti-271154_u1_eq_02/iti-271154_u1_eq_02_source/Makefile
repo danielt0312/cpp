@@ -400,9 +400,9 @@ main.o: main.cpp review.h \
 Node.o: Node.cpp Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Node.o Node.cpp
 
-puff_and_mouse.o: puff_and_mouse.cpp Graph.h \
-		Node.h \
-		puff_and_mouse.h
+puff_and_mouse.o: puff_and_mouse.cpp puff_and_mouse.h \
+		Graph.h \
+		Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o puff_and_mouse.o puff_and_mouse.cpp
 
 review.o: review.cpp review.h \

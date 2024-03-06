@@ -17,3 +17,7 @@ int Node::getY() {
 int Node::getValor() {
 	return valor;
 }
+
+bool Node::operator==(const Node& other) const {
+    return x == other.x && y == other.y && valor == other.valor;
+}
