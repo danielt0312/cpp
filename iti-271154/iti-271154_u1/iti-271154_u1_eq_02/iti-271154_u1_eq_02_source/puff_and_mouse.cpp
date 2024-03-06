@@ -14,7 +14,6 @@
 #include <iostream>
 
 #include "puff_and_mouse.h"
-#include <fstream>
 #include <string>
 
 #include <algorithm>
@@ -276,7 +275,7 @@ void Puff_and_Mouse::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
     QTableWidget *tabla = new QTableWidget(ventanaEmergente);
 
     int numFilas = listaGrafosOrdenados.size();
-    int numColumnas = 1;  // Solo necesitas una columna para la lista de adyacencia
+    int numColumnas = 1;  // Solo necesitamos una columna para la lista de adyacencia
 
     tabla->setRowCount(numFilas);
     tabla->setColumnCount(numColumnas);
@@ -285,10 +284,10 @@ void Puff_and_Mouse::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
     for (const Graph& grafo : listaGrafosOrdenados) {
         QTableWidgetItem *item = new QTableWidgetItem();
 
-        // Configurar el ítem como de solo lectura
+        // item como de solo lectura
         item->setFlags(item->flags() ^ Qt::ItemIsEditable);
 
-        // Construir la cadena de la lista de adyacencia
+        // cadena de la lista de adyacencia
         QString adyacencia;
         for (auto nodoIt = grafo.vertices->rbegin(); nodoIt != grafo.vertices->rend(); ++nodoIt) {
             adyacencia += QString::number(nodoIt->getValor()) + " ";
