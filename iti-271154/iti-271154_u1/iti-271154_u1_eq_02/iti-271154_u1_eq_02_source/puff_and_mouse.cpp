@@ -7,6 +7,8 @@
 #include <QObject>
 #include <algorithm>
 #include <QInputDialog>
+#include <QDialog>
+#include <QTableWidget>
 #include <iostream>
 #include <list>
 #include <iostream>
@@ -152,35 +154,94 @@ void Puff_and_Mouse::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, in
 }
 
 void Puff_and_Mouse::adjacencyMatrix() {
-    // Obtén la cantidad de grafos
-    int numVertices = listaGrafos.size();
+	int numVertices = listaGrafos.size();
 
-    // Crear la matriz de adyacencia
-    std::vector<std::vector<int>> matrix(numVertices, std::vector<int>(numVertices, 0));
+	// matriz de adyacencia vacia
+	std::vector<std::vector<int>> matrix(numVertices, std::vector<int>(numVertices, 0));
 
-    // Recorrer la lista de grafos y actualizar la matriz de adyacencia
-    int i = 0;
-    for (Graph grafo : listaGrafos) {
-        for (Node nodoDestino : *(grafo.vertices)) {
-            // Obtén el índice del grafo de destino
-            auto it = std::find_if(listaGrafos.begin(), listaGrafos.end(),
-                [&nodoDestino](Graph& g) { return g.getContent() == nodoDestino; });
+	// recorrer los grafos y actualizar la matriz
+	int i = 0;
+	for (Graph grafo : listaGrafos) {
+		for (Node nodoDestino : *(grafo.vertices)) {
+		    // Obtén el índice del grafo de destino
+		    auto it = std::find_if(listaGrafos.begin(), listaGrafos.end(),
+			[&nodoDestino](Graph& g) { return g.getContent() == nodoDestino; });
 
-            if (it != listaGrafos.end()) {
-                int j = std::distance(listaGrafos.begin(), it);
-                // Actualiza la matriz de adyacencia
-                matrix[i][j] = 1;
-            }
-        }
-        i++;
-    }
+		    if (it != listaGrafos.end()) {
+			int j = std::distance(listaGrafos.begin(), it);
+			// Actualiza la matriz de adyacencia
+			matrix[i][j] = 1;
+		    }
+		}
+		i++;
+	}
+    
+	// Crear matriz de adyacencia ordenada de forma inversa
+	std::vector<std::vector<int>> matrixOrdenado(numVertices, std::vector<int>(numVertices, 0));
 
-    // Imprimir la matriz de adyacencia
-    std::cout << "Adjacency Matrix:" << std::endl;
-    for (const auto& row : matrix) {
-        for (int value : row) {
-            std::cout << value << " ";
-        }
-        std::cout << std::endl;
-    }
+	for (int i = 0; i < numVertices; ++i) {
+	    for (int j = 0; j < numVertices; ++j) {
+		matrixOrdenado[i][j] = matrix[numVertices - 1 - i][numVertices - 1 - j];
+	    }
+	}
+
+
+	// impresión de la matriz de adyacencia ordenada de forma inversa
+	std::cout << "   ";
+	for (int k = 1; k <= numVertices; k++) {
+	    std::cout << k << "  ";
+	}
+	std::cout << std::endl;
+
+	i = 1;
+	for (const auto& row : matrixOrdenado) {
+	    std::cout << i << "  ";
+	    for (int value : row) {
+		std::cout << value << "  ";
+	    }
+	    std::cout << std::endl;
+	    i++;
+	}
+	displayAdajencyMatrix(matrixOrdenado);
 }
+
+void Puff_and_Mouse::displayAdajencyMatrix(std::vector<std::vector<int>> &matrixOrdenado) {
+    QDialog *ventanaEmergente = new QDialog(nullptr);
+    ventanaEmergente->setWindowTitle("Adjacency Matrix");
+
+    ventanaEmergente->resize(1000, 640);
+
+    QVBoxLayout *layout = new QVBoxLayout(ventanaEmergente);
+
+    QTableWidget *tabla = new QTableWidget(ventanaEmergente);
+
+    int numFilas = listaGrafos.size();
+    int numColumnas = listaGrafos.size();
+
+    tabla->setRowCount(numFilas);
+    tabla->setColumnCount(numColumnas);
+
+    for (int i = 0; i < numFilas; ++i) {
+        for (int j = 0; j < numColumnas; ++j) {
+            QTableWidgetItem *item = new QTableWidgetItem(QString::number(matrixOrdenado[i][j]));
+
+            // Configurar el ítem como de solo lectura
+            item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+
+            tabla->setItem(i, j, item);
+        }
+    }
+
+    // Configurar la tabla como de solo lectura
+    tabla->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    layout->addWidget(tabla);
+
+    QPushButton *botonCerrar = new QPushButton("Cerrar", ventanaEmergente);
+    connect(botonCerrar, &QPushButton::clicked, ventanaEmergente, &QDialog::close);
+    layout->addWidget(botonCerrar);
+
+    ventanaEmergente->setLayout(layout);
+    ventanaEmergente->exec();
+}
+
