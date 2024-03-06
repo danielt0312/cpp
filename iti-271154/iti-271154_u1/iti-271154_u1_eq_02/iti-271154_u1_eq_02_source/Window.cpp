@@ -3,14 +3,14 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include <QDebug> 
-#include "Window.h"
-#include "puff_and_mouse.h"
 #include <QColorDialog>
 #include <QDialog>
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QString>
 #include <QHBoxLayout>
+#include "Window.h"
+#include "ListGraph.h"
 
 Window::Window(QWidget *parent) : QWidget(parent) {
 	// Layout para todo el contenido
@@ -71,12 +71,12 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	// Layout para dibujar los grafos
 	auto *hbGrafos = new QHBoxLayout;
 	
-	pm1 = new Puff_and_Mouse(this);
+	lg1 = new ListGraph(this);
     	QPalette pal = QPalette();
-	pm1->setAutoFillBackground(true);
-	pm1->setPalette(pal);
+	lg1->setAutoFillBackground(true);
+	lg1->setPalette(pal);
 
-	hbGrafos->addWidget(pm1);
+	hbGrafos->addWidget(lg1);
 	
 	vbContenido->addLayout(hbOpciones, 0);
 	vbContenido->addSpacing(20);
@@ -94,18 +94,18 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 void Window::guardarConexion() {
 	QString puntoA = inputGrafoA->text();
 	QString puntoB = inputGrafoB->text();
-	pm1->addEdge(puntoA.toInt(), puntoB.toInt());
+	lg1->addEdge(puntoA.toInt(), puntoB.toInt());
 }
 
 void Window::matrix() {
-	pm1->adjacencyMatrix();
+	lg1->adjacencyMatrix();
 }
 
 void Window::list() {
-	pm1->adjacencyLists();
+	lg1->adjacencyLists();
 }
 
 void Window::limpiarTablero() {
-	pm1->limpiar();
+	lg1->limpiar();
 }
 

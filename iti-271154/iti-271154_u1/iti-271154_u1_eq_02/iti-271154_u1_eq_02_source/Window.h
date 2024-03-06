@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <QLineEdit>
-#include "puff_and_mouse.h"
+#include "ListGraph.h"
 
 class QPushButton;
 
@@ -18,6 +18,6 @@ class Window : public QWidget {
     QLineEdit* inputGrafoB; 
 
   private:
-      	Puff_and_Mouse *pm1;
+      	ListGraph *lg1;
 
 };

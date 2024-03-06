@@ -16,8 +16,6 @@
 #include "ListGraph.h"
 #include <string>
 
-#include <algorithm>
-
 using namespace std;
 
 ListGraph::ListGraph(QWidget *parent)
