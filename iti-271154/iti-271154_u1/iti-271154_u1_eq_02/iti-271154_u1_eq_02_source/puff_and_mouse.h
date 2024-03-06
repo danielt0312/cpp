@@ -2,14 +2,14 @@
 
 #include <QWidget>
 #include <list>
-#include <punto.h>
+#include "Graph.h"
 
 using namespace std;  
 
 class Puff_and_Mouse : public QWidget {
 
   public:
-    list<Punto> listaPuntos;
+    list<Graph> listaGrafos;
 
     Puff_and_Mouse(QWidget *parent = 0);
 
