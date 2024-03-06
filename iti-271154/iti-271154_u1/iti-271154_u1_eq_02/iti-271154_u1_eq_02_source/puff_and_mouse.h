@@ -21,6 +21,8 @@ class Puff_and_Mouse : public QWidget {
     void dibujarArista(QPainter &, Graph &);
     void adjacencyMatrix();
     void displayAdajencyMatrix(std::vector<std::vector<int>> &);
+    void adjacencyLists();
+    void displayAdjacencyLists(list<Graph> &);
   protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);

@@ -87,6 +87,7 @@ Review::Review(QWidget *parent) : QWidget(parent) {
 	// Conexiones de los botones
 	connect(boton1, &QPushButton::clicked, this, &Review::guardarConexion);
 	connect(boton2, &QPushButton::clicked, this, &Review::matrix);
+	connect(boton3, &QPushButton::clicked, this, &Review::list);
 	connect(boton6, &QPushButton::clicked, this, &Review::limpiarTablero);
 }
 
@@ -100,6 +101,11 @@ void Review::matrix() {
 	pm1->adjacencyMatrix();
 }
 
+void Review::list() {
+	pm1->adjacencyLists();
+}
+
 void Review::limpiarTablero() {
 	pm1->limpiar();
 }
+

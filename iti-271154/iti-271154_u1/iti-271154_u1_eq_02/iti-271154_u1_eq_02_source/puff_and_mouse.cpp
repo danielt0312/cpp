@@ -127,9 +127,9 @@ void Puff_and_Mouse::addEdge(int i, int j) {
 void Puff_and_Mouse::dibujarArista(QPainter &painter, Graph &grafo) {
 	for(Node nodoDestino : *(grafo.vertices)) {
 		if(grafo.getContent().getY() >= nodoDestino.getY())
-			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()+20, nodoDestino.getX(), nodoDestino.getY()+20);
-		else
 			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()-20, nodoDestino.getX(), nodoDestino.getY()-20);
+		else
+			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()+20, nodoDestino.getX(), nodoDestino.getY()+20);
 	}
 }
 
@@ -244,4 +244,72 @@ void Puff_and_Mouse::displayAdajencyMatrix(std::vector<std::vector<int>> &matrix
     ventanaEmergente->setLayout(layout);
     ventanaEmergente->exec();
 }
+
+void Puff_and_Mouse::adjacencyLists() {
+    // lista de grafos orden inverso (ordenado)
+    list<Graph> listaGrafosOrdenados(listaGrafos.rbegin(), listaGrafos.rend());
+
+    int i = 1;
+    for (const Graph& grafo : listaGrafosOrdenados) {
+        std::cout << "Lista de adyacencia para el Grafo " << i << ": ";
+
+        // Imprime la lista de adyacencia en orden inverso
+        for (auto nodoIt = grafo.vertices->rbegin(); nodoIt != grafo.vertices->rend(); ++nodoIt) {
+            std::cout << nodoIt->getValor() << " ";
+        }
+
+        std::cout << std::endl;
+        i++;
+    }
+    displayAdjacencyLists(listaGrafosOrdenados);
+}
+
+
+void Puff_and_Mouse::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
+    QDialog *ventanaEmergente = new QDialog(nullptr);
+    ventanaEmergente->setWindowTitle("Adjacency Lists");
+
+    ventanaEmergente->resize(1000, 640);
+
+    QVBoxLayout *layout = new QVBoxLayout(ventanaEmergente);
+
+    QTableWidget *tabla = new QTableWidget(ventanaEmergente);
+
+    int numFilas = listaGrafosOrdenados.size();
+    int numColumnas = 1;  // Solo necesitas una columna para la lista de adyacencia
+
+    tabla->setRowCount(numFilas);
+    tabla->setColumnCount(numColumnas);
+
+    int i = 0;
+    for (const Graph& grafo : listaGrafosOrdenados) {
+        QTableWidgetItem *item = new QTableWidgetItem();
+
+        // Configurar el ítem como de solo lectura
+        item->setFlags(item->flags() ^ Qt::ItemIsEditable);
+
+        // Construir la cadena de la lista de adyacencia
+        QString adyacencia;
+        for (auto nodoIt = grafo.vertices->rbegin(); nodoIt != grafo.vertices->rend(); ++nodoIt) {
+            adyacencia += QString::number(nodoIt->getValor()) + " ";
+        }
+
+        item->setText(adyacencia);
+        tabla->setItem(i, 0, item);
+        i++;
+    }
+
+    // Configurar la tabla como de solo lectura
+    tabla->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    layout->addWidget(tabla);
+
+    QPushButton *botonCerrar = new QPushButton("Cerrar", ventanaEmergente);
+    connect(botonCerrar, &QPushButton::clicked, ventanaEmergente, &QDialog::close);
+    layout->addWidget(botonCerrar);
+
+    ventanaEmergente->setLayout(layout);
+    ventanaEmergente->exec();
+}
+
 
