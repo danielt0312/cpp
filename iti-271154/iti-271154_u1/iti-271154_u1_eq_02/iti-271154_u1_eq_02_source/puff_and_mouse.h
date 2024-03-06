@@ -19,6 +19,7 @@ class Puff_and_Mouse : public QWidget {
     void addEdge(int, int);
     void dibujarFlecha(QPainter &, int, int, int, int);
     void dibujarArista(QPainter &, Graph &);
+    void adjacencyMatrix();
   protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);

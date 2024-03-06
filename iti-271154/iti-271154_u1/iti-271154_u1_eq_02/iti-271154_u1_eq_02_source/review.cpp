@@ -86,6 +86,7 @@ Review::Review(QWidget *parent) : QWidget(parent) {
 	
 	// Conexiones de los botones
 	connect(boton1, &QPushButton::clicked, this, &Review::guardarConexion);
+	connect(boton2, &QPushButton::clicked, this, &Review::matrix);
 	connect(boton6, &QPushButton::clicked, this, &Review::limpiarTablero);
 }
 
@@ -93,6 +94,10 @@ void Review::guardarConexion() {
 	QString puntoA = inputGrafoA->text();
 	QString puntoB = inputGrafoB->text();
 	pm1->addEdge(puntoA.toInt(), puntoB.toInt());
+}
+
+void Review::matrix() {
+	pm1->adjacencyMatrix();
 }
 
 void Review::limpiarTablero() {

@@ -150,3 +150,37 @@ void Puff_and_Mouse::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, in
 	painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
 	painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
 }
+
+void Puff_and_Mouse::adjacencyMatrix() {
+    // Obtén la cantidad de grafos
+    int numVertices = listaGrafos.size();
+
+    // Crear la matriz de adyacencia
+    std::vector<std::vector<int>> matrix(numVertices, std::vector<int>(numVertices, 0));
+
+    // Recorrer la lista de grafos y actualizar la matriz de adyacencia
+    int i = 0;
+    for (Graph grafo : listaGrafos) {
+        for (Node nodoDestino : *(grafo.vertices)) {
+            // Obtén el índice del grafo de destino
+            auto it = std::find_if(listaGrafos.begin(), listaGrafos.end(),
+                [&nodoDestino](Graph& g) { return g.getContent() == nodoDestino; });
+
+            if (it != listaGrafos.end()) {
+                int j = std::distance(listaGrafos.begin(), it);
+                // Actualiza la matriz de adyacencia
+                matrix[i][j] = 1;
+            }
+        }
+        i++;
+    }
+
+    // Imprimir la matriz de adyacencia
+    std::cout << "Adjacency Matrix:" << std::endl;
+    for (const auto& row : matrix) {
+        for (int value : row) {
+            std::cout << value << " ";
+        }
+        std::cout << std::endl;
+    }
+}
