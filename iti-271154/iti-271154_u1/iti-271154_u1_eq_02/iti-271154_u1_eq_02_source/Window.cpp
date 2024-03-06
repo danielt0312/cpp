@@ -3,7 +3,7 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include <QDebug> 
-#include "review.h"
+#include "Window.h"
 #include "puff_and_mouse.h"
 #include <QColorDialog>
 #include <QDialog>
@@ -12,7 +12,7 @@
 #include <QString>
 #include <QHBoxLayout>
 
-Review::Review(QWidget *parent) : QWidget(parent) {
+Window::Window(QWidget *parent) : QWidget(parent) {
 	// Layout para todo el contenido
 	auto *vbContenido = new QVBoxLayout;
 	
@@ -85,27 +85,27 @@ Review::Review(QWidget *parent) : QWidget(parent) {
 	
 	
 	// Conexiones de los botones
-	connect(boton1, &QPushButton::clicked, this, &Review::guardarConexion);
-	connect(boton2, &QPushButton::clicked, this, &Review::matrix);
-	connect(boton3, &QPushButton::clicked, this, &Review::list);
-	connect(boton6, &QPushButton::clicked, this, &Review::limpiarTablero);
+	connect(boton1, &QPushButton::clicked, this, &Window::guardarConexion);
+	connect(boton2, &QPushButton::clicked, this, &Window::matrix);
+	connect(boton3, &QPushButton::clicked, this, &Window::list);
+	connect(boton6, &QPushButton::clicked, this, &Window::limpiarTablero);
 }
 
-void Review::guardarConexion() {
+void Window::guardarConexion() {
 	QString puntoA = inputGrafoA->text();
 	QString puntoB = inputGrafoB->text();
 	pm1->addEdge(puntoA.toInt(), puntoB.toInt());
 }
 
-void Review::matrix() {
+void Window::matrix() {
 	pm1->adjacencyMatrix();
 }
 
-void Review::list() {
+void Window::list() {
 	pm1->adjacencyLists();
 }
 
-void Review::limpiarTablero() {
+void Window::limpiarTablero() {
 	pm1->limpiar();
 }
 

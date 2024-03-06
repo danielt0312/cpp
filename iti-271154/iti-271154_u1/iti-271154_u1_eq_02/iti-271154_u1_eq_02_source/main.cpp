@@ -1,13 +1,14 @@
 #include <QApplication>
 #include <list>
 
-#include "review.h"
+#include "Window.h"
+//#include "review.h"
 
 int main(int argc, char *argv[]) {
 
     QApplication app(argc, argv);
 
-    Review window;
+    Window window;
 
     //window.setStyleSheet("background-color: cyan;"); 
 

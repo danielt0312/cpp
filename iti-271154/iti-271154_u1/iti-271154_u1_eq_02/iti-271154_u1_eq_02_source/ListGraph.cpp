@@ -13,14 +13,14 @@
 #include <list>
 #include <iostream>
 
-#include "puff_and_mouse.h"
+#include "ListGraph.h"
 #include <string>
 
 #include <algorithm>
 
 using namespace std;
 
-Puff_and_Mouse::Puff_and_Mouse(QWidget *parent)
+ListGraph::ListGraph(QWidget *parent)
     : QWidget(parent) {
     
     x = 1;
@@ -38,7 +38,7 @@ Puff_and_Mouse::Puff_and_Mouse(QWidget *parent)
 }
 
 
-void Puff_and_Mouse::mousePressEvent(QMouseEvent* event)
+void ListGraph::mousePressEvent(QMouseEvent* event)
 {
     QWidget::mousePressEvent(event);
     int valorGrafo = listaGrafos.size()+1;
@@ -48,12 +48,12 @@ void Puff_and_Mouse::mousePressEvent(QMouseEvent* event)
     std::cout << "Graph '" << listaGrafos.size() << "' guardado en (" << (event->pos().x()) << ","<< (event->pos().y())<< ")"<< '\n';
 }
 
-void Puff_and_Mouse::paintEvent(QPaintEvent *e) {
+void ListGraph::paintEvent(QPaintEvent *e) {
   Q_UNUSED(e);  
   doPainting();
 }
 
-void Puff_and_Mouse::doPainting() {
+void ListGraph::doPainting() {
     QPainter painter(this);
 
     painter.setBackgroundMode(Qt::OpaqueMode);
@@ -82,13 +82,13 @@ void Puff_and_Mouse::doPainting() {
     }
 }
 
-void Puff_and_Mouse::timerEvent(QTimerEvent *e) {
+void ListGraph::timerEvent(QTimerEvent *e) {
     Q_UNUSED(e);
     repaint();
 }
 
 
-void Puff_and_Mouse::addEdge(int i, int j) {
+void ListGraph::addEdge(int i, int j) {
 	if(i <= 0 or i > listaGrafos.size() or j <= 0 or j > listaGrafos.size() or i == j) {
 		std::cout << "Valor(es) invalidos" << std::endl;
 		return;
@@ -123,7 +123,7 @@ void Puff_and_Mouse::addEdge(int i, int j) {
         }
 }
 
-void Puff_and_Mouse::dibujarArista(QPainter &painter, Graph &grafo) {
+void ListGraph::dibujarArista(QPainter &painter, Graph &grafo) {
 	for(Node nodoDestino : *(grafo.vertices)) {
 		if(grafo.getContent().getY() >= nodoDestino.getY())
 			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()-20, nodoDestino.getX(), nodoDestino.getY()-20);
@@ -132,7 +132,7 @@ void Puff_and_Mouse::dibujarArista(QPainter &painter, Graph &grafo) {
 	}
 }
 
-void Puff_and_Mouse::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, int y2) {
+void ListGraph::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, int y2) {
 	QPen pen = painter.pen();
 	pen.setWidth(2.5);
 	painter.setPen(pen);
@@ -152,7 +152,7 @@ void Puff_and_Mouse::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, in
 	painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
 }
 
-void Puff_and_Mouse::adjacencyMatrix() {
+void ListGraph::adjacencyMatrix() {
 	int numVertices = listaGrafos.size();
 
 	// matriz de adyacencia vacia
@@ -204,7 +204,7 @@ void Puff_and_Mouse::adjacencyMatrix() {
 	displayAdajencyMatrix(matrixOrdenado);
 }
 
-void Puff_and_Mouse::displayAdajencyMatrix(std::vector<std::vector<int>> &matrixOrdenado) {
+void ListGraph::displayAdajencyMatrix(std::vector<std::vector<int>> &matrixOrdenado) {
     QDialog *ventanaEmergente = new QDialog(nullptr);
     ventanaEmergente->setWindowTitle("Adjacency Matrix");
 
@@ -244,7 +244,7 @@ void Puff_and_Mouse::displayAdajencyMatrix(std::vector<std::vector<int>> &matrix
     ventanaEmergente->exec();
 }
 
-void Puff_and_Mouse::adjacencyLists() {
+void ListGraph::adjacencyLists() {
     // lista de grafos orden inverso (ordenado)
     list<Graph> listaGrafosOrdenados(listaGrafos.rbegin(), listaGrafos.rend());
 
@@ -264,7 +264,7 @@ void Puff_and_Mouse::adjacencyLists() {
 }
 
 
-void Puff_and_Mouse::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
+void ListGraph::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
     QDialog *ventanaEmergente = new QDialog(nullptr);
     ventanaEmergente->setWindowTitle("Adjacency Lists");
 

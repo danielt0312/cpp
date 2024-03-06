@@ -6,12 +6,12 @@
 
 using namespace std;  
 
-class Puff_and_Mouse : public QWidget {
+class ListGraph : public QWidget {
 
   public:
     list<Graph> listaGrafos;
 
-    Puff_and_Mouse(QWidget *parent = 0);
+    ListGraph(QWidget *parent = 0);
 
     void mousePressEvent(QMouseEvent* event);
     

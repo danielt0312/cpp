@@ -6,10 +6,10 @@
 
 class QPushButton;
 
-class Review : public QWidget {
+class Window : public QWidget {
 
   public:
-    Review(QWidget *parent = nullptr);
+    Window(QWidget *parent = nullptr);
     void guardarConexion();
     void matrix();
     void list();

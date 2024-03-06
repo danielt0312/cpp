@@ -53,15 +53,19 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = Graph.cpp \
+		ListGraph.cpp \
 		main.cpp \
 		Node.cpp \
 		puff_and_mouse.cpp \
-		review.cpp 
+		review.cpp \
+		Window.cpp 
 OBJECTS       = Graph.o \
+		ListGraph.o \
 		main.o \
 		Node.o \
 		puff_and_mouse.o \
-		review.o
+		review.o \
+		Window.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -142,13 +146,17 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		iti-271154_u1_eq_02_source.pro Graph.h \
+		ListGraph.h \
 		Node.h \
 		puff_and_mouse.h \
-		review.h Graph.cpp \
+		review.h \
+		Window.h Graph.cpp \
+		ListGraph.cpp \
 		main.cpp \
 		Node.cpp \
 		puff_and_mouse.cpp \
-		review.cpp
+		review.cpp \
+		Window.cpp
 QMAKE_TARGET  = iti-271154_u1_eq_02_source
 DESTDIR       = 
 TARGET        = iti-271154_u1_eq_02_source
@@ -336,8 +344,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Graph.h Node.h puff_and_mouse.h review.h $(DISTDIR)/
-	$(COPY_FILE) --parents Graph.cpp main.cpp Node.cpp puff_and_mouse.cpp review.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Graph.h ListGraph.h Node.h puff_and_mouse.h review.h Window.h $(DISTDIR)/
+	$(COPY_FILE) --parents Graph.cpp ListGraph.cpp main.cpp Node.cpp puff_and_mouse.cpp review.cpp Window.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -391,7 +399,12 @@ Graph.o: Graph.cpp Graph.h \
 		Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Graph.o Graph.cpp
 
-main.o: main.cpp review.h \
+ListGraph.o: ListGraph.cpp ListGraph.h \
+		Graph.h \
+		Node.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ListGraph.o ListGraph.cpp
+
+main.o: main.cpp Window.h \
 		puff_and_mouse.h \
 		Graph.h \
 		Node.h
@@ -410,6 +423,12 @@ review.o: review.cpp review.h \
 		Graph.h \
 		Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o review.o review.cpp
+
+Window.o: Window.cpp Window.h \
+		puff_and_mouse.h \
+		Graph.h \
+		Node.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
 
 ####### Install
 
