@@ -69,7 +69,7 @@ void Puff_and_Mouse::doPainting() {
     painter.setFont(font);
 
     for (Graph grafo : listaGrafos) {
-        //dibujarFlecha(punto);
+        dibujarArista(painter, grafo);
         
         int centerX = grafo.getContent().getX() - anchoC / 2;
         int centerY = grafo.getContent().getY() - altoC / 2;
@@ -122,28 +122,33 @@ void Puff_and_Mouse::addEdge(int i, int j) {
         }
 }
 
-/*
-
-void Puff_and_Mouse::dibujarFlecha(Graph& grafo) {
-    QPainter painter(this);
-
-    QPen pen = painter.pen();
-    pen.setWidth(2.5);
-    painter.setPen(pen);
-
-    // Dibujar línea desde el punto A al punto B
-    painter.drawLine(x1, y1, x2, y2);
-
-    // Calcular ángulo de la flecha
-    double angle = atan2(y2 - y1, x2 - x1);
-    int arrowSize = 10;
-
-    // Calcular las coordenadas de la cabeza de la flecha
-    QPointF arrowP1 = QPointF(x2 - arrowSize * cos(angle + M_PI / 6), y2 - arrowSize * sin(angle + M_PI / 6));
-    QPointF arrowP2 = QPointF(x2 - arrowSize * cos(angle - M_PI / 6), y2 - arrowSize * sin(angle - M_PI / 6));
-
-    // Dibujar cabeza de flecha
-    painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
-    painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
+void Puff_and_Mouse::dibujarArista(QPainter &painter, Graph &grafo) {
+	for(Node nodoDestino : *(grafo.vertices)) {
+		std::cout << "Origen (" << grafo.getContent().getX() << " , " << grafo.getContent().getY()  << ")" << std::endl;
+		if(grafo.getContent().getY() >= nodoDestino.getY())
+			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()+20, nodoDestino.getX(), nodoDestino.getY()+20);
+		else
+			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()-20, nodoDestino.getX(), nodoDestino.getY()-20);
+	}
 }
-*/
+
+void Puff_and_Mouse::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, int y2) {
+	QPen pen = painter.pen();
+	pen.setWidth(2.5);
+	painter.setPen(pen);
+
+	painter.drawLine(x1, y1, x2, y2);
+
+	// angulo de la flecha
+	double angle = atan2(y2 - y1, x2 - x1);
+	int arrowSize = 10;
+
+	// coordenadas de la cabeza de la flecha
+	QPointF arrowP1 = QPointF(x2 - arrowSize * cos(angle + M_PI / 6), y2 - arrowSize * sin(angle + M_PI / 6));
+	QPointF arrowP2 = QPointF(x2 - arrowSize * cos(angle - M_PI / 6), y2 - arrowSize * sin(angle - M_PI / 6));
+
+	// cabeza de flecha
+	painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
+	painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
+}
+
