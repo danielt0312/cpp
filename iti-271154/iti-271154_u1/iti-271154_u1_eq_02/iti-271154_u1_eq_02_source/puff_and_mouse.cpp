@@ -124,7 +124,6 @@ void Puff_and_Mouse::addEdge(int i, int j) {
 
 void Puff_and_Mouse::dibujarArista(QPainter &painter, Graph &grafo) {
 	for(Node nodoDestino : *(grafo.vertices)) {
-		std::cout << "Origen (" << grafo.getContent().getX() << " , " << grafo.getContent().getY()  << ")" << std::endl;
 		if(grafo.getContent().getY() >= nodoDestino.getY())
 			dibujarFlecha(painter, grafo.getContent().getX(), grafo.getContent().getY()+20, nodoDestino.getX(), nodoDestino.getY()+20);
 		else
@@ -151,4 +150,3 @@ void Puff_and_Mouse::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, in
 	painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
 	painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
 }
-

@@ -23,7 +23,7 @@ Review::Review(QWidget *parent) : QWidget(parent) {
 	auto *hbOp1Fila2 = new QHBoxLayout;
 	auto *hbOp1Fila3 = new QHBoxLayout;
 	
-	auto *boton1 = new QPushButton("Conectar grafo", this);
+	auto *boton1 = new QPushButton("Crear Arista", this);
 	inputGrafoA = new QLineEdit(this);
 	inputGrafoB = new QLineEdit(this);
 		
@@ -86,6 +86,7 @@ Review::Review(QWidget *parent) : QWidget(parent) {
 	
 	// Conexiones de los botones
 	connect(boton1, &QPushButton::clicked, this, &Review::guardarConexion);
+	connect(boton6, &QPushButton::clicked, this, &Review::limpiarTablero);
 }
 
 void Review::guardarConexion() {
@@ -94,3 +95,6 @@ void Review::guardarConexion() {
 	pm1->addEdge(puntoA.toInt(), puntoB.toInt());
 }
 
+void Review::limpiarTablero() {
+	pm1->limpiar();
+}

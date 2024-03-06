@@ -11,6 +11,7 @@ class Review : public QWidget {
   public:
     Review(QWidget *parent = nullptr);
     void guardarConexion();
+    void limpiarTablero();
     QLineEdit* inputGrafoA;
     QLineEdit* inputGrafoB; 
 
