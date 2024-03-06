@@ -27,6 +27,8 @@ class ListGraph : public QWidget {
     void displayAdjacencyLists(list<Graph> &);
     void DFSUtil(Graph &, unordered_set<int> &);
     void DFS();
+    void BFSUtil(Graph&, unordered_set<int>&);
+    void BFS();
   protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);

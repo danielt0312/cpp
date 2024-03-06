@@ -13,6 +13,7 @@ class Window : public QWidget {
     void guardarConexion();
     void matrix();
     void list();
+    void BFS();
     void DFS();
     void limpiarTablero();
     QLineEdit* inputGrafoA;

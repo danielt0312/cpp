@@ -88,7 +88,8 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	connect(boton1, &QPushButton::clicked, this, &Window::guardarConexion);
 	connect(boton2, &QPushButton::clicked, this, &Window::matrix);
 	connect(boton3, &QPushButton::clicked, this, &Window::list);
-	connect(boton4, &QPushButton::clicked, this, &Window::DFS);
+	connect(boton4, &QPushButton::clicked, this, &Window::BFS);
+	connect(boton5, &QPushButton::clicked, this, &Window::DFS);
 	connect(boton6, &QPushButton::clicked, this, &Window::limpiarTablero);
 }
 
@@ -104,6 +105,10 @@ void Window::matrix() {
 
 void Window::list() {
 	lg1->adjacencyLists();
+}
+
+void Window::BFS() {
+	lg1->BFS();
 }
 
 void Window::DFS() {

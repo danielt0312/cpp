@@ -11,6 +11,7 @@
 #include <QTableWidget>
 #include <iostream>
 #include <list>
+#include <queue>
 #include <iostream>
 
 #include "ListGraph.h"
@@ -341,4 +342,49 @@ void ListGraph::DFS() {
         }
     }
 }
+
+void ListGraph::BFS() {
+    std::unordered_set<int> visitados;
+
+    std::cout << "Recorrido BFS: ";
+
+    int componente = 1;
+    for (Graph& grafo : listaGrafos) {
+        if (visitados.find(grafo.getContent().getValor()) == visitados.end()) {
+            std::cout << "Componente " << componente << ": ";
+            BFSUtil(const_cast<Graph&>(grafo), visitados);
+            std::cout << std::endl;
+            componente++;
+        }
+    }
+}
+
+void ListGraph::BFSUtil(Graph& grafo, std::unordered_set<int>& visitados) {
+    std::queue<Graph> cola;
+    cola.push(grafo);
+
+    while (!cola.empty()) {
+        Graph nodoActual = cola.front();
+        cola.pop();
+
+        // Si el nodo actual no ha sido visitado, imprímelo y márcalo como visitado
+        if (visitados.find(nodoActual.getContent().getValor()) == visitados.end()) {
+            std::cout << nodoActual.getContent().getValor() << " ";
+            visitados.insert(nodoActual.getContent().getValor());
+        }
+
+        // Agregar nodos adyacentes no visitados a la cola
+        for (Node nodoDestino : *(nodoActual.vertices)) {
+            if (visitados.find(nodoDestino.getValor()) == visitados.end()) {
+                auto it = std::find_if(listaGrafos.begin(), listaGrafos.end(),
+                    [&nodoDestino](Graph& g) { return g.getContent() == nodoDestino; });
+
+                if (it != listaGrafos.end()) {
+                    cola.push(*it);
+                }
+            }
+        }
+    }
+}
+
 
