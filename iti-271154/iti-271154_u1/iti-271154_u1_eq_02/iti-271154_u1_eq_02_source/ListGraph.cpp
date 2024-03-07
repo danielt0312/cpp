@@ -295,14 +295,19 @@ void ListGraph::displayAdjacencyLists(list<Graph> &listaGrafosOrdenados) {
     ventanaEmergente->exec();
 }
 
-void ListGraph::limpiarNodosVisitados() { nodosVisitados.clear(); }
+void ListGraph::limpiarNodosVisitados() { 
+    nodosVisitados.clear();
+    dfsOutputText.clear();
+}
 
 void ListGraph::DFSUtil(Graph &grafo, std::unordered_set<int> &visitados) {
     nodosVisitados.insert(grafo.getContent().getValor());
 
+    dfsOutputText += "( " + QString::number(grafo.getContent().getValor()) + " ) contiene " + QString::number(grafo.vertices->size()) + " vertices: ";
     std::cout << "( " << grafo.getContent().getValor() << " ) contiene " << grafo.vertices->size() << " vertices: ";
     for (Node nodoDestino : *(grafo.vertices)) {
-        std::cout << nodoDestino.getValor() << " ";
+	dfsOutputText += QString::number(nodoDestino.getValor()) + " ";        
+	std::cout << nodoDestino.getValor() << " ";
         if (visitados.find(nodoDestino.getValor()) == visitados.end()) {
             // Si el nodo de destino no ha sido visitado, realiza la búsqueda en profundidad desde ese nodo
             auto it = std::find_if(listaGrafos.begin(), listaGrafos.end(),
@@ -313,6 +318,7 @@ void ListGraph::DFSUtil(Graph &grafo, std::unordered_set<int> &visitados) {
             }
         }
     }
+    dfsOutputText += "\n";
     std::cout << "\n";
 }
 
@@ -324,6 +330,11 @@ void ListGraph::DFS() {
         if (nodosVisitados.find(grafo.getContent().getValor()) == nodosVisitados.end())
             DFSUtil(grafo, nodosVisitados);
     }
+    
+    QMessageBox mb;
+    mb.setWindowTitle("Depth First Search (DFS)");
+    mb.setText(dfsOutputText);
+    mb.exec();
 }
 
 void ListGraph::BFSUtil(Graph &grafo, std::unordered_set<int> &visitados) {
@@ -337,12 +348,17 @@ void ListGraph::BFSUtil(Graph &grafo, std::unordered_set<int> &visitados) {
         if (visitados.find(actual.getContent().getValor()) == visitados.end()) {
             nodosVisitados.insert(actual.getContent().getValor());
 
+            dfsOutputText += "( " + QString::number(actual.getContent().getValor()) + " ) contiene " +
+                             QString::number(actual.vertices->size()) + " vertices: ";
+
             std::cout << "( " << actual.getContent().getValor() << " ) contiene " << actual.vertices->size() << " vertices: ";
             for (Node nodoDestino : *(actual.vertices)) {
+                dfsOutputText += QString::number(nodoDestino.getValor()) + " ";
                 std::cout << nodoDestino.getValor() << " ";
                 cola.push(*std::find_if(listaGrafos.begin(), listaGrafos.end(),
                     [&nodoDestino](Graph &g) { return g.getContent() == nodoDestino; }));
             }
+            dfsOutputText += "\n";
             std::cout << "\n";
         }
     }
@@ -357,5 +373,10 @@ void ListGraph::BFS() {
             BFSUtil(grafo, nodosVisitados);
         }
     }
+    
+    QMessageBox mb;
+    mb.setWindowTitle("Breadth-First Search (BFS)");
+    mb.setText(dfsOutputText);
+    mb.exec();
 }
 

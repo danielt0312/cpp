@@ -10,7 +10,6 @@
 using namespace std;  
 
 class ListGraph : public QWidget {
-
   public:
     list<Graph> listaGrafos;
 
@@ -44,4 +43,5 @@ class ListGraph : public QWidget {
     int velocidad;
     QColor colorPincel;
     void doPainting();
+    QString dfsOutputText;
 };
