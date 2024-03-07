@@ -1,14 +1,11 @@
-#include <QGridLayout>
 #include <QLabel>
 #include <QTextEdit>
 #include <QPushButton>
 #include <QDebug> 
 #include <QColorDialog>
-#include <QDialog>
-#include <QFormLayout>
 #include <QVBoxLayout>
-#include <QString>
 #include <QHBoxLayout>
+#include <QString>
 #include "Window.h"
 #include "ListGraph.h"
 
