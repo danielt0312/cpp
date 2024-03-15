@@ -17,7 +17,7 @@ public:
     std::string numeroLetra(int);
     void dibujarArista(QPainter &, Graph &);
     void BFS();
-
+    void limpiarColores();
 protected:
     void paintEvent(QPaintEvent *event);
     void timerEvent(QTimerEvent *event);
@@ -31,3 +31,4 @@ private:
     void doPainting();
     QString dfsOutputText;
 };
+

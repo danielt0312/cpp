@@ -1,3 +1,4 @@
+#include <QColor>
 #include <deque>
 
 class Graph {
@@ -7,8 +8,9 @@ private:
 	int valor;
 public:
 	Graph(int, int, int);
-	std::deque<Graph> vertices;
+	std::deque<Graph*> vertices;
 	int getX() const, getY() const, getValor() const;
 	bool operator==(const Graph& other) const;
+	QColor color;
 };
 

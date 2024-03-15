@@ -1,15 +1,23 @@
 #include <QPainter>
 #include <QTimer>
+#include <QColor>
 #include <QTextStream>
 #include <QtWidgets>
 #include <QTimer>
 #include <QDialog>
 #include <QTableWidget>
+
+#include <iostream>
+#include <thread>
+#include <chrono>
+
 #include <string>
 #include <queue>
 #include "ListGraph.h"
 
 using namespace std;
+
+
 
 ListGraph::ListGraph(QWidget *parent)
     : QWidget(parent) {
@@ -68,11 +76,10 @@ void ListGraph::doPainting() {
     
     // Dibujado de grafos
     for (Graph grafo : listaGrafos) {
-        
         int centerX = grafo.getX() - anchoC / 2;
         int centerY = grafo.getY() - altoC / 2;
         
-        painter.setBrush(Qt::white);
+        painter.setBrush(grafo.color);
         painter.drawEllipse(centerX, centerY, anchoC, altoC);
 
 	//QString valor = QString::fromStdString(std::to_string(grafo.getValor()));
@@ -83,8 +90,8 @@ void ListGraph::doPainting() {
 
 // dibujos de las aristas de la lista de grafos
 void ListGraph::dibujarArista(QPainter &painter, Graph &grafo) {
-    for(Graph grafoDestino : grafo.vertices) {
-	painter.drawLine(grafo.getX(), grafo.getY(), grafoDestino.getX(), grafoDestino.getY());
+    for(Graph* grafoDestino : grafo.vertices) {
+	painter.drawLine(grafo.getX(), grafo.getY(), grafoDestino->getX(), grafoDestino->getY());
     }
 }
 
@@ -97,7 +104,7 @@ std::string ListGraph::numeroLetra(int valor) {
     return std::string(1, 'A' + valor - 1);
 }
 
-// Creación de vertices
+// Creación de aristas
 void ListGraph::addEdge(int i, int j) {
     // Validación de índices
     if (static_cast<size_t>(i) <= 0 || static_cast<size_t>(i) > listaGrafos.size() || static_cast<size_t>(j) <= 0 || static_cast<size_t>(j) > listaGrafos.size() || i == j) {
@@ -110,16 +117,16 @@ void ListGraph::addEdge(int i, int j) {
     Graph& puntoDestino = listaGrafos[j - 1];
 
     // Comprobar si la arista ya existe
-    for (Graph& graph : puntoOrigen.vertices) {
-        if (graph == puntoDestino) {
+    for (Graph* graph : puntoOrigen.vertices) {
+        if (*graph == puntoDestino) {
             std::cout << "Relación previamente creada de i ( " << numeroLetra(puntoOrigen.getValor()) << " ) en j ( " << numeroLetra(puntoDestino.getValor()) << " )" << std::endl;
             return;
         }
     }
 
     // Agregar el vértice de destino a las listas de vértices
-    puntoOrigen.vertices.push_back(puntoDestino);
-    puntoDestino.vertices.push_back(puntoOrigen);
+    puntoOrigen.vertices.push_back(&puntoDestino);
+    puntoDestino.vertices.push_back(&puntoOrigen);
     std::cout << "Se agregó una arista: ( " << numeroLetra(puntoOrigen.getValor()) << " ) --- ( " << numeroLetra(puntoDestino.getValor()) << " )" << std::endl;
 }
 
@@ -130,35 +137,49 @@ void ListGraph::BFS() {
         return;
     }
     
-    // Marcar todos los vértices como no visitados
     const int nV = listaGrafos.size();
     bool visitado[nV] = {false};
     
-    // Cola para el recorrido BFS
-    std::queue<Graph> cola;
+    std::queue<Graph*> cola;
     
-    // Empezar el BFS desde el primer vértice
-    cola.push(listaGrafos.front());
+    // Siempre se inicia en el nodo A
+    cola.push(&listaGrafos.front());
     visitado[0] = true;
     
+    std::cout << "BFS" << std::endl;
     while (!cola.empty()) {
-        // Sacar el vértice de la cola
-        Graph verticeActual = cola.front();
+        Graph* verticeActual = cola.front();
+        verticeActual->color = Qt::darkCyan;
+        
+        std::this_thread::sleep_for(std::chrono::seconds(1)); // Esperamos un segundo
+        
+    	std::cout << "[ " << numeroLetra(verticeActual->getValor()) << " ] - inicio" << std::endl;
         cola.pop();
         
-        // Mostrar el valor del vértice actual
-        std::cout << numeroLetra(verticeActual.getValor()) << " ";
-        
-        // Recorrer todos los vértices adyacentes al vértice actual
-        for (Graph grafoDestino : verticeActual.vertices) {
-            int indice = grafoDestino.getValor() - 1; // Obtener el índice del vértice en listaGrafos
+        std::cout << "[ ";
+        for (Graph* grafoDestino : verticeActual->vertices) {
+            int indice = grafoDestino->getValor() - 1;
             
             // Si el vértice adyacente no ha sido visitado, marcarlo como visitado y agregarlo a la cola
             if (!visitado[indice]) {
                 visitado[indice] = true;
+                grafoDestino->color = Qt::darkCyan;
                 cola.push(grafoDestino);
+                
+	    	std::cout << numeroLetra(grafoDestino->getValor()) << " ";
             }
         }
+        std::cout << "] - salida" << std::endl;
+        
+        verticeActual->color = Qt::cyan;
     }
-    std::cout << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(1)); // Esperamos un segundo
 }
+
+// Establecer colores en estado base (blanco)
+void ListGraph::limpiarColores() {
+    for (Graph& grafo : listaGrafos) {
+    	grafo.color = Qt::white;
+    }
+}
+

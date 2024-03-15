@@ -10,6 +10,7 @@ public:
     void guardarConexion();
     void BFS();
     void limpiarTablero();
+    void limpiarColores();
     int letraNumero(char);
     QLineEdit* inputGrafoA;
     QLineEdit* inputGrafoB; 

@@ -6,8 +6,11 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QString>
+#include <thread>
+
 #include "Window.h"
 #include "ListGraph.h"
+
 
 Window::Window(QWidget *parent) : QWidget(parent) {
 	// Layout para todo el contenido
@@ -42,9 +45,11 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	auto *hbOp2Fila3 = new QHBoxLayout;
 	
 	auto *boton2 = new QPushButton("Breadth-First Search", this);
-	auto *boton3 = new QPushButton("Limpiar", this);
+	auto *boton3 = new QPushButton("Eliminar grafos existentes", this);
+	auto *boton4 = new QPushButton("Reestablecer colores de grafos");
 	
-	hbOp2Fila2->addWidget(boton2);
+	hbOp2Fila2->addWidget(boton4);
+	hbOp2Fila1->addWidget(boton2);
 	hbOp2Fila3->addWidget(boton3);
 	
 	vbOp2->addLayout(hbOp2Fila1);
@@ -77,6 +82,7 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	connect(boton1, &QPushButton::clicked, this, &Window::guardarConexion);
 	connect(boton2, &QPushButton::clicked, this, &Window::BFS);
 	connect(boton3, &QPushButton::clicked, this, &Window::limpiarTablero);
+	connect(boton4, &QPushButton::clicked, this, &Window::limpiarColores);
 }
 
 // Conveción de letra a número con ASCII
@@ -104,10 +110,18 @@ void Window::guardarConexion() {
 }
 
 void Window::BFS() {
-	lg->BFS();
+    // Creamos un hilo secundario para no interrumpir el principal
+    std::thread bfsThread(&ListGraph::BFS, lg);
+    bfsThread.detach(); // Liberamos el hilo para que se ejecute independientemente
 }
+
+
 
 void Window::limpiarTablero() {
 	lg->limpiar();
+}
+
+void Window::limpiarColores() {
+	lg->limpiarColores();
 }
 
