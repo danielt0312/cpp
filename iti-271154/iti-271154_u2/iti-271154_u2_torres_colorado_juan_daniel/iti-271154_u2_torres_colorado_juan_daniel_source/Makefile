@@ -53,13 +53,14 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = Graph.cpp \
-		ListGraph.cpp \
 		main.cpp \
-		Window.cpp 
+		Node.cpp \
+		Window.cpp moc_Graph.cpp
 OBJECTS       = Graph.o \
-		ListGraph.o \
 		main.o \
-		Window.o
+		Node.o \
+		Window.o \
+		moc_Graph.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -140,10 +141,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		iti-271154_u2_torres_colorado_juan_daniel_source.pro Graph.h \
-		ListGraph.h \
+		Node.h \
 		Window.h Graph.cpp \
-		ListGraph.cpp \
 		main.cpp \
+		Node.cpp \
 		Window.cpp
 QMAKE_TARGET  = iti-271154_u2_torres_colorado_juan_daniel_source
 DESTDIR       = 
@@ -332,8 +333,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Graph.h ListGraph.h Window.h $(DISTDIR)/
-	$(COPY_FILE) --parents Graph.cpp ListGraph.cpp main.cpp Window.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Graph.h Node.h Window.h $(DISTDIR)/
+	$(COPY_FILE) --parents Graph.cpp main.cpp Node.cpp Window.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -365,8 +366,15 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_Graph.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_Graph.cpp
+moc_Graph.cpp: Graph.h \
+		Node.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/daniel/C++/iti-271154/iti-271154_u2/iti-271154_u2_torres_colorado_juan_daniel/iti-271154_u2_torres_colorado_juan_daniel_source/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/daniel/C++/iti-271154/iti-271154_u2/iti-271154_u2_torres_colorado_juan_daniel/iti-271154_u2_torres_colorado_juan_daniel_source -I/home/daniel/C++/iti-271154/iti-271154_u2/iti-271154_u2_torres_colorado_juan_daniel/iti-271154_u2_torres_colorado_juan_daniel_source -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include Graph.h -o moc_Graph.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -379,26 +387,29 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
-Graph.o: Graph.cpp Graph.h
+Graph.o: Graph.cpp Graph.h \
+		Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Graph.o Graph.cpp
 
-ListGraph.o: ListGraph.cpp ListGraph.h \
-		Graph.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ListGraph.o ListGraph.cpp
-
 main.o: main.cpp Window.h \
-		ListGraph.h \
-		Graph.h
+		Graph.h \
+		Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
+Node.o: Node.cpp Node.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Node.o Node.cpp
+
 Window.o: Window.cpp Window.h \
-		ListGraph.h \
-		Graph.h
+		Graph.h \
+		Node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
+
+moc_Graph.o: moc_Graph.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Graph.o moc_Graph.cpp
 
 ####### Install
 

@@ -6,8 +6,9 @@ int main(int argc, char *argv[]) {
 
     Window window;
     window.resize(1366, 768);
-    window.setWindowTitle("Identifying Bipartite Graphs");
+    window.setWindowTitle("Identificando Grafos Bipartito");
     window.show();
 
   return app.exec();
 }
+
