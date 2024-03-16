@@ -6,7 +6,7 @@ int main(int argc, char *argv[]) {
 
     Window window;
     window.resize(1366, 768);
-    window.setWindowTitle("Identificando Grafos Bipartito");
+    window.setWindowTitle("Identificando Grafos Bipartitos");
     window.show();
 
   return app.exec();

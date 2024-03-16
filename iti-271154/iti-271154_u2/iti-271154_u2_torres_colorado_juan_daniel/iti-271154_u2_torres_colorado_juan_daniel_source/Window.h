@@ -16,8 +16,8 @@ public:
     int letraNumero(char);
     void mostrarMensajeBipartito(bool);
     void mostrarAdvertencia();
-    QLineEdit* inputGrafoA;
-    QLineEdit* inputGrafoB; 
+    QLineEdit* inputNodoA;
+    QLineEdit* inputNodoB; 
     QLineEdit* inputBipartite;
 
 private:

@@ -168,7 +168,6 @@ void Graph::bipartite(int inicio) {
     
     if(vertices.size() == 0) {
     	emit advertencia();
-    	//QMessageBox::information(nullptr, "Advertencia", "No hay ningún vértice en el nodo  ");
     	return;
     }
     
@@ -202,7 +201,6 @@ void Graph::bipartite(int inicio) {
                 if (vecino->color == currentVertex->color) {
                     std::cout << "El Grafo no es bipartito" << std::endl;
                     emit bipartiteResult(false);
-                    //QMessageBox::information(nullptr, "¿Es Grafo Bipartito?", "El Grafo no es bipartito  ");
                     return;
                 }
             }
@@ -211,6 +209,5 @@ void Graph::bipartite(int inicio) {
 
     std::cout << "El Grafo si es bipartito" << std::endl;
     emit bipartiteResult(true);
-    //QMessageBox::information(nullptr, "¿Es Grafo Bipartito?", "El Grafo si es bipartito  ");
 }
 

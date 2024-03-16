@@ -24,15 +24,15 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	
 	auto *boton1 = new QPushButton("Crear Arista", this);
 	auto *boton5 = new QPushButton("Eliminar Arista", this);
-	inputGrafoA = new QLineEdit(this);
-	inputGrafoB = new QLineEdit(this);
+	inputNodoA = new QLineEdit(this);
+	inputNodoB = new QLineEdit(this);
 	inputBipartite = new QLineEdit(this);
 		
-	hbOp1Fila1->addWidget((new QLabel("Grafo Origen:")), 1);
-	hbOp1Fila1->addWidget(inputGrafoA, 3);
+	hbOp1Fila1->addWidget((new QLabel("Nodo Origen:")), 1);
+	hbOp1Fila1->addWidget(inputNodoA, 3);
 	
-	hbOp1Fila2->addWidget((new QLabel("Grafo Destino:")), 1);
-	hbOp1Fila2->addWidget(inputGrafoB, 3);
+	hbOp1Fila2->addWidget((new QLabel("Nodo Destino:")), 1);
+	hbOp1Fila2->addWidget(inputNodoB, 3);
 	
 	hbOp1Fila3->addWidget(boton1);
 	hbOp1Fila3->addWidget(boton5);
@@ -48,10 +48,10 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	
 	auto *boton2 = new QPushButton("¿Es Grafo Bipartito?", this);
 	
-	auto *boton3 = new QPushButton("Eliminar grafos existentes", this);
-	auto *boton4 = new QPushButton("Reestablecer colores de grafos", this);
+	auto *boton3 = new QPushButton("Eliminar grafo", this);
+	auto *boton4 = new QPushButton("Restablecer colores de nodos", this);
 	
-	hbOp2Fila1->addWidget((new QLabel("Iniciar en Grafo ('A' por defecto):")), 1);
+	hbOp2Fila1->addWidget((new QLabel("Iniciar en Nodo ('A' por defecto):")), 1);
 	hbOp2Fila1->addWidget(inputBipartite, 3);
 	
 	hbOp2Fila2->addWidget(boton2);
@@ -112,8 +112,8 @@ int Window::letraNumero(char letra) {
 // Creación de aristas
 void Window::guardarConexion() {
     // Extraer el primer carácter del texto de los QLineEdit y convertirlo a char
-    char letraA = inputGrafoA->text().isEmpty() ? '\0' : inputGrafoA->text().at(0).toLatin1();
-    char letraB = inputGrafoB->text().isEmpty() ? '\0' : inputGrafoB->text().at(0).toLatin1();
+    char letraA = inputNodoA->text().isEmpty() ? '\0' : inputNodoA->text().at(0).toLatin1();
+    char letraB = inputNodoB->text().isEmpty() ? '\0' : inputNodoB->text().at(0).toLatin1();
     
     // Convertir las letras a números
     int puntoA = letraNumero(letraA);
@@ -125,8 +125,8 @@ void Window::guardarConexion() {
 
 // Eliminiacion de aristas
 void Window::eliminarConexion() {
-    char letraA = inputGrafoA->text().isEmpty() ? '\0' : inputGrafoA->text().at(0).toLatin1();
-    char letraB = inputGrafoB->text().isEmpty() ? '\0' : inputGrafoB->text().at(0).toLatin1();
+    char letraA = inputNodoA->text().isEmpty() ? '\0' : inputNodoA->text().at(0).toLatin1();
+    char letraB = inputNodoB->text().isEmpty() ? '\0' : inputNodoB->text().at(0).toLatin1();
     
     int puntoA = letraNumero(letraA);
     int puntoB = letraNumero(letraB);
