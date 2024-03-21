@@ -50,8 +50,10 @@ void Graph::paintEvent(QPaintEvent *e) {
     doPainting();
 }
 
+// Función para limpiar los vértices
 void Graph::limpiar() { vertices.clear(); std::cout << "Grafo limpiado" << std::endl; }
 
+// Dibujar Grafo
 void Graph::doPainting() {
     QPainter painter(this);
     painter.setBackgroundMode(Qt::OpaqueMode);
@@ -84,8 +86,6 @@ void Graph::doPainting() {
         QString valor = QString::fromStdString(numeroLetra(nodo.getValor()));
         painter.drawText(nodo.getX()-4, nodo.getY()+4, valor);
     }
-
-    // No es necesario llamar a painter.end() aquí
 }
 
 
@@ -167,6 +167,7 @@ void Graph::bipartite(int inicio) {
     limpiarColores();
     
     if(vertices.size() == 0) {
+        // Emitir señal para que se muestre el mensaje en el hilo principal
     	emit advertencia();
     	return;
     }
@@ -178,11 +179,13 @@ void Graph::bipartite(int inicio) {
     nodoInicio->color = Qt::red;
     conjuntoA.push_back(nodoInicio);
     
-    std::this_thread::sleep_for(std::chrono::seconds(1)); // Esperamos un segundo
+    // Esperamos un segundo
+    std::this_thread::sleep_for(std::chrono::seconds(1)); 
     
     std::queue<Node*> cola;
     cola.push(nodoInicio);
 
+    // Función para identificar grafo bipartito
     while (!cola.empty()) {
         Node* currentVertex = cola.front();
         cola.pop();
