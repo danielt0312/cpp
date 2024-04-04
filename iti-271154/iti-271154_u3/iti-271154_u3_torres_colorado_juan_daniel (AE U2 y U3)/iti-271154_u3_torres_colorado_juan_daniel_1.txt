@@ -1,0 +1,14 @@
+Start:
+	If Not '1' Return False
+	If '1' Write '='
+	Goto FoundPlus
+FoundPlus:
+	Move Right
+	If '+' Goto Validate
+	If '1' Goto FoundPlus
+	If Blank Return False
+Validate:
+	Write '1'
+	Move Right
+	If Not '1' Return False
+	If '1' Return True

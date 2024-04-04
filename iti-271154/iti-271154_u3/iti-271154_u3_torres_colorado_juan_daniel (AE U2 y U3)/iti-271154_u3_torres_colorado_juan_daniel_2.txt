@@ -1,0 +1,16 @@
+Start:
+	If '0' Goto Accepted
+	If '1' Goto Accepted
+	If '2' Goto Accepted
+	If '3' Goto Accepted
+	If '4' Goto Accepted
+	If '5' Goto Accepted
+	If '6' Goto Accepted
+	If '7' Goto Accepted
+	If '8' Goto Accepted
+	If '9' Goto Accepted
+	Return False
+Accepted:
+	Move Right
+	If Not Blank Goto Start
+	Return True
