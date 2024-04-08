@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Puff_and_Mouse1.0.0
-DISTDIR = /home/daniel/C++/Qmake/Puff_and_Mouse/.tmp/Puff_and_Mouse1.0.0
+DISTDIR = /home/daniel/Lenguajes\ y\ Autómatas/iti-271154/iti-271154_u1/Practicas/Qmake/Puff_and_Mouse/.tmp/Puff_and_Mouse1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so -lGL -lpthread   
@@ -53,8 +53,10 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
+		objeto.cpp \
 		puff_and_mouse.cpp 
 OBJECTS       = main.o \
+		objeto.o \
 		puff_and_mouse.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -135,7 +137,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Puff_and_Mouse.pro puff_and_mouse.h main.cpp \
+		Puff_and_Mouse.pro objeto.h \
+		puff_and_mouse.h main.cpp \
+		objeto.cpp \
 		puff_and_mouse.cpp
 QMAKE_TARGET  = Puff_and_Mouse
 DESTDIR       = 
@@ -324,8 +328,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents puff_and_mouse.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp puff_and_mouse.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents objeto.h puff_and_mouse.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp objeto.cpp puff_and_mouse.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -375,10 +379,15 @@ compiler_clean: compiler_moc_predefs_clean
 
 ####### Compile
 
-main.o: main.cpp puff_and_mouse.h
+main.o: main.cpp puff_and_mouse.h \
+		objeto.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-puff_and_mouse.o: puff_and_mouse.cpp puff_and_mouse.h
+objeto.o: objeto.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o objeto.o objeto.cpp
+
+puff_and_mouse.o: puff_and_mouse.cpp puff_and_mouse.h \
+		objeto.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o puff_and_mouse.o puff_and_mouse.cpp
 
 ####### Install
