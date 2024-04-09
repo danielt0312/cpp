@@ -104,7 +104,7 @@ void Automata::doPainting() {
     
     // Primero dibujamos las transiciones por debajo de los nodos
     for (Node nodo : estados)
-        dibujarArista(painter, nodo);
+        dibujarTransicion(painter, nodo);
     
     // Dibujado de nodos
     for (Node nodo : estados) {
@@ -122,7 +122,7 @@ void Automata::doPainting() {
 }
 
 // dibujos de las transiciones de la lista de nodos
-void Automata::dibujarArista(QPainter &painter, Node &nodo) {
+void Automata::dibujarTransicion(QPainter &painter, Node &nodo) {
     for(Node* nodoDestino : nodo.transiciones){
     	if(nodo.getX() == nodoDestino->getX() && nodo.getY() == nodoDestino->getY()) {
             // Crear el trazado de la curva bezier
@@ -137,55 +137,88 @@ void Automata::dibujarArista(QPainter &painter, Node &nodo) {
             painter.drawPath(bezierPath);
 	    continue;
     	}
-    	painter.drawLine(nodo.getX(), nodo.getY(), nodoDestino->getX(), nodoDestino->getY());
+    	
+	if (nodo.getY() >= nodoDestino->getY()) dibujarFlecha(painter, nodo.getX(), nodo.getY()-20, nodoDestino->getX(), nodoDestino->getY()-20);
+	else dibujarFlecha(painter, nodo.getX(), nodo.getY()+20, nodoDestino->getX(), nodoDestino->getY()+20);
     }
+}
+
+// Dibujar cabeza de flecha
+void Automata::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, int y2) {
+    QPen pen = painter.pen();
+    pen.setWidth(2.5);
+    painter.setPen(pen);
+    
+    painter.drawLine(x1, y1, x2, y2);
+
+    // angulo de la flecha
+    double angle = atan2(y2 - y1, x2 - x1);
+    int arrowSize = 10;
+
+    // coordenadas de la cabeza de la flecha
+    QPointF arrowP1 = QPointF(x2 - arrowSize * cos(angle + M_PI / 6), y2 - arrowSize * sin(angle + M_PI / 6));
+    QPointF arrowP2 = QPointF(x2 - arrowSize * cos(angle - M_PI / 6), y2 - arrowSize * sin(angle - M_PI / 6));
+
+    // cabeza de flecha
+    painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
+    painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
 }
 
 // Buscar estado
 void Automata::addTransition(int ix, int iy, int fx, int fy) {
 	// No hay estados
-	if(estados.size() == 0) {
+	if (estados.size() == 0) {
 		std::cout << "No hay nigún estado en el autómata" << std::endl;
 		return;
 	}
 
-	// Buscar nodo origen y destino
-	// Por defecto ambos en el primer elemento
-	Node& nodoOrigen = estados[0];
-	Node& nodoDestino = estados[0];
+	// Variable para validar si el origen y el destino se encontró
+	int validate = 0;
     	
-    	for (Node& nodoA : estados) {
-    	// Aunque el radio sea de 20, dar una tolerancia de 10 puntos más
-    	// Ambos son el mismo
-    	if (std::abs(nodoA.getX() - ix) <= 30 && std::abs(nodoA.getY() - iy) <= 30 && std::abs(nodoA.getX() - fx) <= 30 && std::abs(nodoA.getY() - fy) <= 30 ) {
-    	     	std::cout << "(EQ) 'q" << nodoA.getValor() << "' -> 'q" << nodoA.getValor() << "'" << std::endl;
-    	     	//nodoOrigen = &x;
-    	     	//nodoDestino = &x;
-    	     	Node& nod = estados[nodoA.getValor()];
-    	     	nodoA.transiciones.push_back(&nod);
-    	     	break;
+	for (Node& A : estados) {
+	    	// Aunque el radio sea de 20, dar una tolerancia de 10 puntos más
+	    	// Ambos son el mismo
+	    	if (std::abs(A.getX() - ix) <= 30 && std::abs(A.getY() - iy) <= 30 && std::abs(A.getX() - fx) <= 30 && std::abs(A.getY() - fy) <= 30) {
+	    	     	std::cout << "(EQ) 'q" << A.getValor() << "' -> 'q" << A.getValor() << "'" << std::endl;
+	    	     	A.transiciones.push_back(&A);
+	    	     	validate = 2;
+	    	     	break;
 
-    	// Ambos son diferentes
-    	} else if ((std::abs(nodoA.getX() - ix) <= 30 && std::abs(nodoA.getY() - iy) <= 30) || (std::abs(nodoA.getX() - fx) <= 30 && std::abs(nodoA.getY() - fy) <= 30)) {
-    	 	for (Node& nodoB : estados) {
-    	     		if(nodoA == nodoB) {
-    	     			continue;
-    	     		}
-    	     		if((std::abs(nodoB.getX() - ix) <= 30 && std::abs(nodoB.getY() - iy) <= 30) || (std::abs(nodoB.getX() - fx) <= 30 && std::abs(nodoB.getY() - fy) <= 30)) {
-				std::cout << "'q" << nodoA.getValor() << "' -> 'q" << nodoB.getValor() << "'" << std::endl;
-    	     			//nodoA.transiciones.push_back(&nodoB);
-		    	     	Node& nod = estados[nodoB.getValor()];
-		    	     	nodoA.transiciones.push_back(&nod);
-    	     			break;
-    	     		}
-    	     	}
-    	     	
-    	     	break;
-    	}
-    }
-    
-    opcion = 1;
-    std::cout << "Modo: Agregar Automata" << std::endl;
+	    	// Ambos son diferentes pero A es el Origen
+	    	} else if (std::abs(A.getX() - ix) <= 30 && std::abs(A.getY() - iy) <= 30) {
+	    		++validate;
+	    	 	for (Node& B : estados) {
+	    	     		if (std::abs(B.getX() - fx) <= 30 && std::abs(B.getY() - fy) <= 30) {
+					std::cout << "'q" << A.getValor() << "' -> 'q" << B.getValor() << "'" << std::endl;
+	    	     			A.transiciones.push_back(&B);
+					++validate;
+	    	     			break;
+	    	     		}
+	    	     	}
+	    	     	
+	    	     	break;
+	    	     	
+	    	// Ambos son diferentes pero A es el Destino
+	    	} else if (std::abs(A.getX() - fx) <= 30 && std::abs(A.getY() - fy) <= 30) {
+	    		++validate;
+	    		
+	    		for (Node& B : estados) {
+	    	     		if(std::abs(B.getX() - ix) <= 30 && std::abs(B.getY() - iy) <= 30) {
+					std::cout << "'q" << B.getValor() << "' -> 'q" << A.getValor() << "'" << std::endl;
+	    	     			B.transiciones.push_back(&A);
+					++validate;
+	    	     			break;
+	    	     		}
+	    	     	}
+	    		
+	    		break;
+		}
+	}
+	
+	if (validate != 2) std::cout << "No se encontró el estado de origen/destino" << std::endl;
+
+	opcion = 1;
+	std::cout << "Modo: Agregar Automata" << std::endl;
 }
 
 

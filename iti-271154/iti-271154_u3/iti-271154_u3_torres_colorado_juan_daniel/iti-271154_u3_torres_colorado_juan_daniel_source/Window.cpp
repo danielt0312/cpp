@@ -20,21 +20,30 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	
 	// Layout para los botones / inputs
 	auto *vbOpciones = new QVBoxLayout;
+	
+	auto *vbProbar = new QVBoxLayout;
+	inProbar = new QLineEdit(this);
+	inProbar->setPlaceholderText("AB...");
+	auto *boton0 = new QPushButton("Probar", this);
+	vbProbar->addWidget(inProbar);
+	vbProbar->addWidget(boton0);
+		
 	auto *boton1 = new QPushButton("Dibujar", this);
 	auto *boton2 = new QPushButton("Nueva Transición", this);
 	auto *boton3 = new QPushButton("Eliminar ", this);
 	auto *boton4 = new QPushButton("Eliminar Relación", this);
 	auto *boton5 = new QPushButton("Limpiar", this);
-	vbOpciones->addWidget(boton1);
-	vbOpciones->addSpacing(10);
-	vbOpciones->addWidget(boton2);
-	vbOpciones->addSpacing(10);
-	vbOpciones->addWidget(boton3);
-	vbOpciones->addSpacing(10);
-	vbOpciones->addWidget(boton4);
-	vbOpciones->addSpacing(10);
-	vbOpciones->addWidget(boton5);
 	
+	comentario = new QLabel("");
+
+	vbOpciones->addWidget(boton1);
+	vbOpciones->addWidget(boton2);
+	vbOpciones->addWidget(boton3);
+	vbOpciones->addWidget(boton4);
+	vbOpciones->addWidget(boton5);
+	vbOpciones->addWidget(comentario);
+	
+	vbMenu->addLayout(vbProbar);
 	vbMenu->addLayout(vbOpciones);
 	
 	// Layout para dibujar los grafos

@@ -16,7 +16,8 @@ public:
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
     void limpiar();
-    void dibujarArista(QPainter &, Node &);
+    void dibujarTransicion(QPainter &, Node &);
+    void dibujarFlecha(QPainter &, int,int,int,int);
     void limpiarColores();
     void addTransition(int,int,int,int);
     void reiniciarIF();
