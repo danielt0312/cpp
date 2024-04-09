@@ -1,5 +1,5 @@
 #include <QColor>
-#include <vector>
+#include <deque>
 
 class Node {
 private:
@@ -8,7 +8,7 @@ private:
 	int valor;
 public:
 	Node(int, int, int);
-	std::vector<Node*> transiciones;
+	std::deque<Node*> transiciones;
 	int getX() const, getY() const, getValor() const;
 	bool operator==(const Node& other) const;
 	QColor color;

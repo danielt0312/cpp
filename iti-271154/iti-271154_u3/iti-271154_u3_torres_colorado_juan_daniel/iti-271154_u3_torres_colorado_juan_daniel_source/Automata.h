@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWidget>
-#include <vector>
+#include <deque>
 #include <iostream>
 #include "Node.h"
 
@@ -11,7 +11,7 @@ class Automata : public QWidget {
     Q_OBJECT // habilita la funcionalidad de señales 
 public:
     Automata(QWidget *parent = 0);
-    vector<Node> estados;
+    deque<Node> estados;
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
@@ -20,10 +20,10 @@ public:
     void limpiarColores();
     void addTransition(int,int,int,int);
     void reiniciarIF();
-    int ix = -1;
-    int iy = -1;
-    int fx = -1;
-    int fy = -1;
+    int inix = -1;
+    int iniy = -1;
+    int finx = -1;
+    int finy = -1;
     int opcion = 1; // Definir que boton se presiono y, por ende, que accion
 
 // Dado que se trabaja en un hilo secundario, los qmensajesbox se deben de mostrar en el principal

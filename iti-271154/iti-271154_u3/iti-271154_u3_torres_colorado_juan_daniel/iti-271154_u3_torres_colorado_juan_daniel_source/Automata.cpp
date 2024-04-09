@@ -18,9 +18,7 @@
 
 using namespace std;
 
-Automata::Automata(QWidget *parent)
-    : QWidget(parent) {
-    
+Automata::Automata(QWidget *parent) : QWidget(parent) {
     x = 1;
     timerId = startTimer(10);
 
@@ -32,10 +30,10 @@ Automata::Automata(QWidget *parent)
 }
 
 // Cuando se presiona
-void Automata::mousePressEvent(QMouseEvent* event)
-{
+void Automata::mousePressEvent(QMouseEvent* event) {
     QWidget::mousePressEvent(event);
     if(opcion == 1) {
+	//std::cout << "ini: " << inix << ", " << iniy << "   fin: " << finx << ", " << finy << std::endl;
 	    Node nodo(event->pos().x(),event->pos().y(), estados.size());
 	    estados.push_back(nodo);
 		
@@ -43,31 +41,28 @@ void Automata::mousePressEvent(QMouseEvent* event)
     }
     
     if(opcion == 2) {
-    std::cout << "in" << std::endl;
-    	ix = event->pos().x();
-    	iy = event->pos().y();
+    	inix = event->pos().x();
+    	iniy = event->pos().y();
     }
 }
 
 // Cuando se mueve
-void Automata::mouseMoveEvent(QMouseEvent* event)
-{
+void Automata::mouseMoveEvent(QMouseEvent* event) {
     QWidget::mousePressEvent(event);
     //std::cout << "Mouse Move ("<<event->pos().x() << ","<< event->pos().y()<< ")"<< '\n';
     
     if(opcion == 2) {
-    	fx = event->pos().x();
-    	fy = event->pos().y();
+    	finx = event->pos().x();
+    	finy = event->pos().y();
     }
 }
 
 // Cuando se suelta
-void Automata::mouseReleaseEvent(QMouseEvent* event)
-{
+void Automata::mouseReleaseEvent(QMouseEvent* event) {
     QWidget::mousePressEvent(event);
     //std::cout << "Mouse Release ("<<event->pos().x() << ","<< event->pos().y()<< ")"<< '\n';
     if(opcion == 2) {
-    	addTransition(ix, iy, fx, fy);
+    	addTransition(inix, iniy, finx, finy);
     	reiniciarIF();
     	//std::cout << ix << ", " << iy << ", " << fx << ", " << fy << std::endl;
     }
@@ -103,8 +98,8 @@ void Automata::doPainting() {
     font.setWeight(QFont::Bold);
     painter.setFont(font);
     
-    if(opcion == 2 && ix != -1 && iy != -1 && fx != -1 && fy != -1) {
-    	painter.drawLine(ix, iy, fx, fy);
+    if(opcion == 2 && inix != -1 && iniy != -1 && finx != -1 && finy != -1) {
+    	painter.drawLine(inix, iniy, finx, finy);
     }
     
     // Primero dibujamos las transiciones por debajo de los nodos
@@ -143,34 +138,49 @@ void Automata::dibujarArista(QPainter &painter, Node &nodo) {
 	    continue;
     	}
     	painter.drawLine(nodo.getX(), nodo.getY(), nodoDestino->getX(), nodoDestino->getY());
-    	std::cout << nodo.getX() << ", " << nodo.getY() << ", " << nodoDestino->getX() << ", " << nodoDestino->getY() << std::endl;
     }
 }
 
 // Buscar estado
 void Automata::addTransition(int ix, int iy, int fx, int fy) {
-    // Buscar nodo inicio y final
-    for (Node& nodoA : estados) {
-    	// Aunque el radio sea de 20, dar una tolerancia de 10 puntos
+	// No hay estados
+	if(estados.size() == 0) {
+		std::cout << "No hay nigún estado en el autómata" << std::endl;
+		return;
+	}
+
+	// Buscar nodo origen y destino
+	// Por defecto ambos en el primer elemento
+	Node& nodoOrigen = estados[0];
+	Node& nodoDestino = estados[0];
+    	
+    	for (Node& nodoA : estados) {
+    	// Aunque el radio sea de 20, dar una tolerancia de 10 puntos más
     	// Ambos son el mismo
     	if (std::abs(nodoA.getX() - ix) <= 30 && std::abs(nodoA.getY() - iy) <= 30 && std::abs(nodoA.getX() - fx) <= 30 && std::abs(nodoA.getY() - fy) <= 30 ) {
-    	     	std::cout << "ambos son el mismo" << std::endl;
-    	     	nodoA.transiciones.push_back(&nodoA);
+    	     	std::cout << "(EQ) 'q" << nodoA.getValor() << "' -> 'q" << nodoA.getValor() << "'" << std::endl;
+    	     	//nodoOrigen = &x;
+    	     	//nodoDestino = &x;
+    	     	Node& nod = estados[nodoA.getValor()];
+    	     	nodoA.transiciones.push_back(&nod);
     	     	break;
 
     	// Ambos son diferentes
     	} else if ((std::abs(nodoA.getX() - ix) <= 30 && std::abs(nodoA.getY() - iy) <= 30) || (std::abs(nodoA.getX() - fx) <= 30 && std::abs(nodoA.getY() - fy) <= 30)) {
     	 	for (Node& nodoB : estados) {
-    	 		std::cout << "size: " << estados.size() << std::endl;
     	     		if(nodoA == nodoB) {
-    	     			std::cout << nodoA.getValor() << " - " << nodoB.getValor() << std::endl;
     	     			continue;
     	     		}
     	     		if((std::abs(nodoB.getX() - ix) <= 30 && std::abs(nodoB.getY() - iy) <= 30) || (std::abs(nodoB.getX() - fx) <= 30 && std::abs(nodoB.getY() - fy) <= 30)) {
-    	     			nodoA.transiciones.push_back(&nodoB);
-    	     			std::cout << "'q" << nodoA.getValor() << "' -> 'q" << nodoB.getValor() << "'" << std::endl;
+				std::cout << "'q" << nodoA.getValor() << "' -> 'q" << nodoB.getValor() << "'" << std::endl;
+    	     			//nodoA.transiciones.push_back(&nodoB);
+		    	     	Node& nod = estados[nodoB.getValor()];
+		    	     	nodoA.transiciones.push_back(&nod);
+    	     			break;
     	     		}
     	     	}
+    	     	
+    	     	break;
     	}
     }
     
@@ -188,9 +198,9 @@ void Automata::limpiarColores() {
 
 // Para reiniciar la flecha que se genera al agregar una transicion
 void Automata::reiniciarIF() {
-	ix = -1;
-    	iy = -1;
-    	fx = -1;
-    	fy = -1;
+	inix = -1;
+    	iniy = -1;
+    	finx = -1;
+    	finy = -1;
 }
 
