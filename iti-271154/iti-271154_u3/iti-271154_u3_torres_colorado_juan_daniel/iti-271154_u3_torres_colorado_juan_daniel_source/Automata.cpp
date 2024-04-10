@@ -15,6 +15,7 @@
 #include <string>
 #include <queue>
 #include "Automata.h"
+#include "CustomInputDialog.h"
 
 using namespace std;
 
@@ -68,18 +69,20 @@ void Automata::mouseReleaseEvent(QMouseEvent* event) {
     }
 }
 
+// Temporizador
 void Automata::timerEvent(QTimerEvent *e) {
     Q_UNUSED(e);
     repaint();
 }
 
+// Para pintar
 void Automata::paintEvent(QPaintEvent *e) {
     Q_UNUSED(e);
     doPainting();
 }
 
-// Función para limpiar los vértices
-void Automata::limpiar() { estados.clear(); std::cout << "Grafo limpiado" << std::endl; }
+// Función para eliminar los estados
+void Automata::limpiar() { estados.clear(); std::cout << "Estados limpiados" << std::endl; }
 
 // Dibujar Grafo
 void Automata::doPainting() {
@@ -90,7 +93,7 @@ void Automata::doPainting() {
     w = width();
 
     QPen pen = painter.pen();
-    pen.setWidth(3.5);
+    pen.setWidth(2);
     painter.setPen(pen);
 
     QFont font;
@@ -118,6 +121,14 @@ void Automata::doPainting() {
         QString valor = "q" + QString::number(nodo.getValor());
         if(nodo.getValor() > 9) painter.drawText(nodo.getX()-10, nodo.getY()+4, valor);
         else painter.drawText(nodo.getX()-7, nodo.getY()+4, valor);
+        
+        // Dibujar estado final
+        if(nodo.finalState) {
+        	painter.save(); // guardar estado del pincel
+        	painter.setBrush(Qt::transparent);
+        	painter.drawEllipse(centerX+5, centerY+5, anchoC-10, altoC-10);
+        	painter.restore(); // restaurar estado del pincel
+        }
     }
 }
 
@@ -138,30 +149,39 @@ void Automata::dibujarTransicion(QPainter &painter, Node &nodo) {
 	    continue;
     	}
     	
-	if (nodo.getY() >= nodoDestino->getY()) dibujarFlecha(painter, nodo.getX(), nodo.getY()-20, nodoDestino->getX(), nodoDestino->getY()-20);
-	else dibujarFlecha(painter, nodo.getX(), nodo.getY()+20, nodoDestino->getX(), nodoDestino->getY()+20);
+    	dibujarFlecha(painter, nodo, *nodoDestino);
+	//if (nodo.getY() >= nodoDestino->getY()) dibujarFlecha(painter, nodo.getX(), nodo.getY()-20, nodoDestino->getX(), nodoDestino->getY()-20);
+	//else dibujarFlecha(painter, nodo.getX(), nodo.getY()+20, nodoDestino->getX(), nodoDestino->getY()+20);
     }
 }
 
 // Dibujar cabeza de flecha
-void Automata::dibujarFlecha(QPainter &painter, int x1, int y1, int x2, int y2) {
+void Automata::dibujarFlecha(QPainter &painter, Node& ori, Node& des) {
     QPen pen = painter.pen();
     pen.setWidth(2.5);
     painter.setPen(pen);
     
-    painter.drawLine(x1, y1, x2, y2);
+    // dibujo de segmento (linea)
+    painter.drawLine(ori.getX(), ori.getY(), des.getX(), des.getY());
+    
+    // imprimir caracteres
+    QString valor = QString(ori.input) + ", " + QString(ori.pop) + ", " + QString(ori.push);
+    int mediaX = (ori.getX() + des.getX()) / 2;
+    int mediaY = (ori.getY() + des.getY()) / 2;
+    
+    painter.drawText(mediaX-20, mediaY, valor);
 
     // angulo de la flecha
-    double angle = atan2(y2 - y1, x2 - x1);
+    double angle = atan2(des.getY() - ori.getY(), des.getX() - ori.getX());
     int arrowSize = 10;
 
     // coordenadas de la cabeza de la flecha
-    QPointF arrowP1 = QPointF(x2 - arrowSize * cos(angle + M_PI / 6), y2 - arrowSize * sin(angle + M_PI / 6));
-    QPointF arrowP2 = QPointF(x2 - arrowSize * cos(angle - M_PI / 6), y2 - arrowSize * sin(angle - M_PI / 6));
+    QPointF arrowP1 = QPointF(des.getX() - arrowSize * cos(angle + M_PI / 6), des.getY() - arrowSize * sin(angle + M_PI / 6));
+    QPointF arrowP2 = QPointF(des.getX() - arrowSize * cos(angle - M_PI / 6), des.getY() - arrowSize * sin(angle - M_PI / 6));
 
-    // cabeza de flecha
-    painter.drawLine(QLineF(QPointF(x2, y2), arrowP1));
-    painter.drawLine(QLineF(QPointF(x2, y2), arrowP2));
+    // dibujo de la cabeza de la flecha
+    painter.drawLine(QLineF(QPointF(des.getX(), des.getY()), arrowP1));
+    painter.drawLine(QLineF(QPointF(des.getX(), des.getY()), arrowP2));
 }
 
 // Buscar estado
@@ -190,7 +210,7 @@ void Automata::addTransition(int ix, int iy, int fx, int fy) {
 	    	 	for (Node& B : estados) {
 	    	     		if (std::abs(B.getX() - fx) <= 30 && std::abs(B.getY() - fy) <= 30) {
 					std::cout << "'q" << A.getValor() << "' -> 'q" << B.getValor() << "'" << std::endl;
-	    	     			A.transiciones.push_back(&B);
+	    	     			setCharTransition(A, B);
 					++validate;
 	    	     			break;
 	    	     		}
@@ -205,7 +225,7 @@ void Automata::addTransition(int ix, int iy, int fx, int fy) {
 	    		for (Node& B : estados) {
 	    	     		if(std::abs(B.getX() - ix) <= 30 && std::abs(B.getY() - iy) <= 30) {
 					std::cout << "'q" << B.getValor() << "' -> 'q" << A.getValor() << "'" << std::endl;
-	    	     			B.transiciones.push_back(&A);
+	    	     			setCharTransition(B, A);
 					++validate;
 	    	     			break;
 	    	     		}
@@ -221,6 +241,28 @@ void Automata::addTransition(int ix, int iy, int fx, int fy) {
 	std::cout << "Modo: Agregar Automata" << std::endl;
 }
 
+// Establecer los caracteres de la transicion
+void Automata::setCharTransition(Node& ori, Node& des) {
+    // Desplegar dialog 
+    CustomInputDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QStringList inputs = dialog.getInputs();
+        
+        ori.input = toChar(inputs[0]);
+        ori.pop = toChar(inputs[1]);
+        ori.push = toChar(inputs[2]);
+        
+        ori.transiciones.push_back(&des);
+        
+        std::cout << "Input: '" << ori.input << "'\nEliminar: '" << ori.pop << "'\nAgregar:'" << ori.push << "'" << std::endl;
+    }
+}
+
+// Conversion de QString a char
+char Automata::toChar(QString& word) {
+	if(word.isEmpty() || word.at(0).isSpace()) return '~';
+	return word.at(0).toLatin1();
+}
 
 // Establecer colores en estado base (blanco)
 void Automata::limpiarColores() {

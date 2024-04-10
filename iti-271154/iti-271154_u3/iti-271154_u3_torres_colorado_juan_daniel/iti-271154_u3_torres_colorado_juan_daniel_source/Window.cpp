@@ -21,13 +21,9 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	// Layout para los botones / inputs
 	auto *vbOpciones = new QVBoxLayout;
 	
-	auto *vbProbar = new QVBoxLayout;
 	inProbar = new QLineEdit(this);
 	inProbar->setPlaceholderText("AB...");
-	auto *boton0 = new QPushButton("Probar", this);
-	vbProbar->addWidget(inProbar);
-	vbProbar->addWidget(boton0);
-		
+	auto *boton0 = new QPushButton("Probar", this);		
 	auto *boton1 = new QPushButton("Dibujar", this);
 	auto *boton2 = new QPushButton("Nueva Transición", this);
 	auto *boton3 = new QPushButton("Eliminar ", this);
@@ -35,7 +31,10 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	auto *boton5 = new QPushButton("Limpiar", this);
 	
 	comentario = new QLabel("");
-
+	
+	vbOpciones->addWidget(inProbar);
+	vbOpciones->addWidget(boton0);
+	vbOpciones->addSpacing(30);
 	vbOpciones->addWidget(boton1);
 	vbOpciones->addWidget(boton2);
 	vbOpciones->addWidget(boton3);
@@ -43,7 +42,6 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 	vbOpciones->addWidget(boton5);
 	vbOpciones->addWidget(comentario);
 	
-	vbMenu->addLayout(vbProbar);
 	vbMenu->addLayout(vbOpciones);
 	
 	// Layout para dibujar los grafos
@@ -83,11 +81,13 @@ Window::Window(QWidget *parent) : QWidget(parent) {
 
 void Window::agregar() {
 	std::cout << "Modo: Agregar Automata" << std::endl;
+	comentario->setText("Presiona sobre\nel mapa");
 	automaton->opcion = 1;
 }
 
 void Window::transicion() {
 	std::cout << "Modo: Agregar Transicion" << std::endl;
+	comentario->setText("Mantén presionado\nsobre un estado y\narrastra en dirección\nhacia el destino");	
 	automaton->opcion = 2;
 }
 

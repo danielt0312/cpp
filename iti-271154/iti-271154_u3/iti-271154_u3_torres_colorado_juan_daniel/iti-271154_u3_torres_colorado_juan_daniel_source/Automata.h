@@ -17,10 +17,12 @@ public:
     void mouseReleaseEvent(QMouseEvent* event);
     void limpiar();
     void dibujarTransicion(QPainter &, Node &);
-    void dibujarFlecha(QPainter &, int,int,int,int);
+    void dibujarFlecha(QPainter &,Node&,Node&);
     void limpiarColores();
     void addTransition(int,int,int,int);
+    void setCharTransition(Node&, Node&);
     void reiniciarIF();
+    char toChar(QString&);
     int inix = -1;
     int iniy = -1;
     int finx = -1;
