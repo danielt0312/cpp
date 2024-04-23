@@ -1,9 +1,0 @@
-Fuente:
-http://www2.cs.uidaho.edu/~jeffery/courses/210/lexyacc/
-
-Paso 0: Borrar intermedios
-rm lex.yy.* tp tp.o tpgram.tab.*
-Paso 1: Hacer Make
-make
-Paso 2:
-./tp < input.pas

@@ -1,0 +1,1 @@
+ qmake -project && echo "QT += widgets" >> $(basename "$(pwd)").pro && qmake && make && ./$(basename "$(pwd)")
